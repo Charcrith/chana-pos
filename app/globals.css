@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  --background: #eef3ef;
+  --surface: #ffffff;
+  --surface-2: #f4f7f5;
+  --ink: #15231c;
+  --muted: #5d6f66;
+  --line: #d5e0d9;
+  --accent: #1f6b4a;
+  --accent-hover: #18563b;
+  --accent-soft: #cfe6da;
+  --danger: #b42318;
+  --success: #157a45;
+  --hero-wash: radial-gradient(
+      120% 80% at 10% -10%,
+      #d7ebe1 0%,
+      transparent 55%
+    ),
+    radial-gradient(90% 60% at 100% 0%, #e7efe6 0%, transparent 45%),
+    linear-gradient(180deg, #eef3ef 0%, #e6efe9 100%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-thai);
+}
+
+body {
+  background: var(--background);
+  color: var(--ink);
+  font-family: var(--font-thai), "Noto Sans Thai", system-ui, sans-serif;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.app-shell {
+  min-height: 100dvh;
+  background: var(--hero-wash);
+}

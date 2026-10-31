@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-chana_root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-chana_oms}
+      MYSQL_USER: ${MYSQL_USER:-chana}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-chana_pass}
+      TZ: Asia/Bangkok
+    ports:
+      - "3306:3306"
+    volumes:
+      - chana_mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: mysql://${MYSQL_USER:-chana}:${MYSQL_PASSWORD:-chana_pass}@db:3306/${MYSQL_DATABASE:-chana_oms}
+      SESSION_SECRET: ${SESSION_SECRET:-change-me-to-a-long-random-secret-32chars}
+      TZ: Asia/Bangkok
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+
+volumes:
+  chana_mariadb_data:
